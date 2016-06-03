@@ -23,15 +23,11 @@ import static org.junit.Assert.*;
  * @author Joel Dewey
  *         Date: 6/3/2016
  */
-@RunWith(value = SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = MyDemoAppApplication.class)
-@WebIntegrationTest(value = "server.port=0")
 public class IndexControllerSeleniumTest {
 	public static final String RALPH_STRING = "My cat's breath smells like " +
 			"cat food!";
 
-	@Value("${local.server.port}")
-	private int serverPort;
+	private int serverPort = 8083;
 	private String appUrl;
 	private RemoteWebDriver driver;
 
