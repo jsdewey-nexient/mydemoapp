@@ -7,10 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.junit.Assert.*;
 
@@ -28,12 +33,17 @@ public class IndexControllerSeleniumTest {
 	@Value("${local.server.port}")
 	private int serverPort;
 	private String appUrl;
-	private FirefoxDriver driver;
+	private RemoteWebDriver driver;
 
 	@Before
 	public void setUp() {
 		this.appUrl = String.format("http://localhost:%d/", serverPort);
-		this.driver = new FirefoxDriver();
+		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+		try {
+			this.driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
+		} catch (MalformedURLException e) {
+			fail("Something is wrong with the RemoteWebDriver URL!");
+		}
 		this.driver.get(this.appUrl);
 	}
 
