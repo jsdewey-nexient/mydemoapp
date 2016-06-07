@@ -33,7 +33,7 @@ public class IndexControllerSeleniumTest {
 
 	@Before
 	public void setUp() {
-		this.appUrl = String.format("http://54.200.157.72/:%d/", serverPort);
+		this.appUrl = String.format("http://54.200.157.72:%d/", serverPort);
 		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
 		try {
 			this.driver = new RemoteWebDriver(new URL("http://172.15.0.13:4444/wd/hub"), capabilities);
