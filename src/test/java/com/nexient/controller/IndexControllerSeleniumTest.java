@@ -1,11 +1,13 @@
 package com.nexient.controller;
 
 import com.nexient.MyDemoAppApplication;
+import com.nexient.SeleniumSetup;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -29,34 +31,85 @@ public class IndexControllerSeleniumTest {
 
 	private int serverPort = 8083;
 	private String appUrl;
-	private RemoteWebDriver driver;
+	private WebDriver driver;
 
 	@Before
 	public void setUp() {
 		this.appUrl = String.format("http://54.200.157.72:%d/", serverPort);
-		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-		try {
-			this.driver = new RemoteWebDriver(new URL("http://172.15.0.13:4444/wd/hub"), capabilities);
-		} catch (MalformedURLException e) {
-			fail("Something is wrong with the RemoteWebDriver URL!");
-		}
-		this.driver.get(this.appUrl);
 	}
 
 	@Test
-	public void testRalphStringIsPresent() {
-		String pageText = this.driver.findElement(By.id("main-p")).getText();
-		assertEquals(RALPH_STRING, pageText);
+	public void testRalphStringIsPresentInChrome() {
+		assertEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.chrome())
+		);
 	}
 
 	@Test
-	public void testRalphStringIsntPresent() {
-		String pageText = this.driver.findElement(By.id("main-p")).getText();
-		assertNotEquals(RALPH_STRING, pageText);
+	public void testRalphStringIsntPresentInChrome() {
+		assertNotEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.chrome())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsPresentInFirefox() {
+		assertEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.firefox())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsntPresentInFirefox() {
+		assertNotEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.firefox())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsPresentInInternetExplorer() {
+		assertEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.internetExplorer())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsntPresentInInternetExplorer() {
+		assertNotEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.chrome())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsPresentInEdge() {
+		assertEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.edge())
+		);
+	}
+
+	@Test
+	public void testRalphStringIsntPresentInEdge() {
+		assertNotEquals(
+				RALPH_STRING,
+				this.getMainPText(DesiredCapabilities.edge())
+		);
 	}
 
 	@After
 	public void tearDown() {
 		this.driver.close();
+	}
+
+	private String getMainPText(DesiredCapabilities desiredCapabilities) {
+		this.driver = SeleniumSetup.getDriver(desiredCapabilities);
+		this.driver.get(this.appUrl);
+		return this.driver.findElement(By.id("main-p")).getText();
 	}
 }
