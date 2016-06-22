@@ -82,7 +82,7 @@ public class IndexControllerSeleniumTest {
 	public void testRalphStringIsntPresentInInternetExplorer() {
 		assertNotEquals(
 				RALPH_STRING,
-				this.getMainPText(DesiredCapabilities.chrome())
+				this.getMainPText(DesiredCapabilities.internetExplorer())
 		);
 	}
 
